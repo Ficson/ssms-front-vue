@@ -1,3 +1,4 @@
+<!--
 <template>
   <el-cascader
     :options="options"
@@ -8,7 +9,6 @@
 
 <script>
 import Category from '@/api/category'
-
 export default {
   created () {
     this.loadOptions()
@@ -42,3 +42,4 @@ export default {
 
 <style>
 </style>
+-->

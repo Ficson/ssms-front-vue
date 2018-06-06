@@ -1,37 +1,148 @@
 <template>
   <el-container class="container">
-      <el-header class="header">
-    <el-row>
-      <el-col :span="4">
-        <div class="grid-content bg-purple">
-          <img src="logo.png">
+    <el-header class="header">
+      <el-row>
+        <el-col :span="4">
+          <div class="grid-content bg-purple">
+            <img src="./logo1.png" alt="">
+          </div>
+        </el-col>
+        <el-col :offset="16" :span="4"><div class="grid-content bg-purple">
+          <a
+            href="#"
+            @click.prevent="logout">退出</a>
         </div>
-      </el-col>
-      <el-col>
-        <a
-          href="#"
-          @click.prevent="logout">退出</a>
-      </el-col>
-    </el-row>
-      </el-header>
-      <el-container class="container">
-        <el-aside class="aside" width="200px">Aside</el-aside>
-        <el-main class="main">Main</el-main>
-      </el-container>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-container class="container">
+      <el-aside class="aside" width="200px">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo aside-menu"
+          @open="handleOpen"
+          @close="handleClose"
+          :unique-opened="false"
+          :router="true">
+
+          <el-menu-item index="/">首页</el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>会员营销</span>
+            </template>
+            <el-menu-item index="/marking-test">短信测试</el-menu-item>
+            <el-menu-item index="/marking-send">发送短信</el-menu-item>
+            <el-menu-item index="2-3">模板管理</el-menu-item>
+            <el-menu-item index="2-4">通讯录管理</el-menu-item>
+            <el-menu-item index="2-5">短信回复</el-menu-item>
+            <el-menu-item index="2-6">发送记录</el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>验证码短信</span>
+            </template>
+            <el-menu-item index="3-1">短信测试</el-menu-item>
+            <el-menu-item index="3-2">模板管理</el-menu-item>
+            <el-menu-item index="3-3">发送记录</el-menu-item>
+            <el-menu-item index="3-4">注册率统计</el-menu-item>
+          </el-submenu>
+
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>通知短信</span>
+            </template>
+            <el-menu-item index="4-1">短信测试</el-menu-item>
+            <el-menu-item index="4-2">模板管理</el-menu-item>
+            <el-menu-item index="4-3">短信回复</el-menu-item>
+            <el-menu-item index="4-4">发送记录</el-menu-item>
+          </el-submenu>
+
+          <el-submenu index="5">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>我要充值</span>
+            </template>
+            <el-menu-item index="5-1">线上充值</el-menu-item>
+            <el-menu-item index="5-2">线下充值</el-menu-item>
+            <el-menu-item index="5-3">充值记录</el-menu-item>
+            <el-menu-item index="5-4">短信账单</el-menu-item>
+          </el-submenu>
+
+          <el-submenu index="6">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>账户设置</span>
+            </template>
+            <el-menu-item index="6-1">身份验证</el-menu-item>
+            <el-menu-item index="6-2">多账号管理</el-menu-item>
+            <el-menu-item index="6-3">IP白名单管理</el-menu-item>
+            <el-menu-item index="6-4">余额提醒</el-menu-item>
+            <el-menu-item index="6-5">修改密码</el-menu-item>
+          </el-submenu>
+
+            <el-submenu index="7">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>短信设置</span>
+            </template>
+            <el-menu-item index="7-1">签名管理</el-menu-item>
+            <el-menu-item index="7-2">防轰炸设置</el-menu-item>
+            <el-menu-item index="7-3">黑名单管理</el-menu-item>
+            <el-menu-item index="7-4">数据推送设置</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+      <el-main class="main">
+        <router-view></router-view>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 
 <script>
+import {removeUserInfo} from '@/assets/js/auth'
 export default {
   data () {
     return {}
+  },
+  methods: {
+    logout () {
+      this.$confirm('确认退出吗?', '退出提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => { // 点击确认执行 resolve 函数
+        // 1. 删除本地存储中的用户登陆信息
+        removeUserInfo()
+        // 2. 跳转到登陆视图
+        this.$router.push({
+          name: 'login'
+        })
+        // 提示用户退出成功
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        })
+      }).catch(() => {
+        // 点击取消的处理
+      })
+    },
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
+    }
   }
 }
 </script>
 
 <style>
 
-  .container {
+  .container, .aside .aside-menu {
     height: 100%;
   }
 
@@ -48,5 +159,6 @@ export default {
     background-color: #E9EEF3;
     height: 100%;
   }
+
 
 </style>

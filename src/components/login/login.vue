@@ -4,7 +4,7 @@
       el-form 会生成 form 标签
       我们自己增加的 class 会和它生成的结果 class 合并到一起
      -->
-    <el-form class="login-from" label-position="top" ref="form" :model="userForm" label-width="80px">
+    <el-form class="login-form" label-position="top" ref="form" :model="userForm" label-width="80px">
       <h2 class="heading">用户登陆</h2>
       <el-form-item label="用户名">
         <el-input
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {saveUserInfo} from '@/assets/js/auth'
 export default {
   data () {
     return {
@@ -39,11 +39,19 @@ export default {
       // 2. 表单验证
       // 3. 发请求执行登陆操作
       // 4. 根据响应做交互
-      const res = await axios.post('https://57c1c3b4-697a-49a8-8e5a-50b666795676.mock.pstmn.io/login', this.userForm)
+      const res = await this.$http.post('/login', this.userForm)
       const data = res.data
       if (data.meta.status === 200) {
+        // 登陆成功，我们把服务器发给我们当前登陆的用户信息存储到本地存储
+        saveUserInfo(data.data)
+        // 导航到 home 组件
         this.$router.push({
           name: 'home'
+        })
+        // 给出登陆成功的提示消息
+        this.$message({
+          type: 'success',
+          message: '登陆成功!'
         })
       }
     }
@@ -59,13 +67,13 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .login-wrap .login-from {
+  .login-form {
     background-color: #fff;
     width: 400px;
     padding: 30px;
     border-radius: 5px;
   }
-  .login-wrap .login-from .login-btn {
+  .login-form .login-btn {
     width: 100%;
   }
 </style>

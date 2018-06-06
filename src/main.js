@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import httpPlugin from '@/assets/js/http'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // 引入我们的公共样式
@@ -12,6 +13,8 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 Vue.use(ElementUI)
+Vue.use(httpPlugin)
+Vue.config.productionTip = false
 
 new Vue({
   el: '#app',

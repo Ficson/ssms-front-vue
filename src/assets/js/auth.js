@@ -12,6 +12,7 @@ const userInfoKey = 'user-info'
  */
 export function saveUserInfo (userInfo = {}) {
   window.localStorage.setItem(userInfoKey, JSON.stringify(userInfo))
+  console.log(userInfoKey)
 }
 
 /**
