@@ -41,7 +41,9 @@ export default {
       // 4. 根据响应做交互
       const res = await this.$http.post('/login', this.userForm)
       const data = res.data
-      if (data.meta.status === 200) {
+      console.log(data)
+      if (data.status === 200) {
+        console.log('I am in')
         // 登陆成功，我们把服务器发给我们当前登陆的用户信息存储到本地存储
         saveUserInfo(data.data)
         // 导航到 home 组件

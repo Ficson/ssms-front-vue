@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login.vue' // @ 是 src 路径的别名，webpack 配置的
 import Home from '@/components/home/home.vue'
-/*import UserList from '@/components/user-list/user-list.vue'*/
-/*import RoleList from '@/components/role-list/role-list.vue'*/
 import MarkingTest from '@/components/marking/test.vue'
 import MarkingSend from '@/components/marking/send.vue'
 import {getUserInfo} from '@/assets/js/auth.js'

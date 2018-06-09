@@ -159,6 +159,4 @@ export default {
     background-color: #E9EEF3;
     height: 100%;
   }
-
-
 </style>
