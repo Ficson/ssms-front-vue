@@ -1,11 +1,7 @@
 <template>
-  <div class="login-wrap">
-    <!--
-      el-form 会生成 form 标签
-      我们自己增加的 class 会和它生成的结果 class 合并到一起
-     -->
-    <el-form class="login-form" label-position="top" ref="form" :model="userForm" label-width="80px">
-      <h2 class="heading">用户登陆</h2>
+  <div class="register-wrap">
+    <el-form class="register-form" label-position="top" ref="form" :model="userForm" label-width="80px">
+      <h2 class="heading">用户注册</h2>
       <el-form-item label="手机号码">
         <el-input
           v-model="userForm.telephone"></el-input>
@@ -16,10 +12,10 @@
           v-model="userForm.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" type="primary" @click="login">立即登陆</el-button>
+        <el-button  class="register-btn" type="primary" @click="register">立即注册</el-button>
       </el-form-item>
       <el-form-item>
-        <a href="#" v-on:click="toRegister">没有账号？马上注册 </a>
+        <a href="#" v-on:click="toLogin">已有账号？马上登陆</a>
       </el-form-item>
     </el-form>
   </div>
@@ -37,11 +33,7 @@ export default {
     }
   },
   methods: {
-    async login () {
-      // 1. 采集表单数据
-      // 2. 表单验证
-      // 3. 发请求执行登陆操作
-      // 4. 根据响应做交互
+    async register () {
       var telephone = this.userForm.telephone
       var password = this.userForm.password
       if (telephone === '' || password === '') {
@@ -51,10 +43,9 @@ export default {
         })
         return
       }
-      const res = await this.$http.post('/login', this.userForm)
+      const res = await this.$http.post('/register', this.userForm)
       const data = res.data
       if (data.status === 200) {
-        console.log('I am in')
         // 登陆成功，我们把服务器发给我们当前登陆的用户信息存储到本地存储
         saveUserInfo(data.data)
         // 导航到 home 组件
@@ -68,9 +59,9 @@ export default {
         })
       }
     },
-    toRegister () {
+    toLogin () {
       this.$router.push({
-        name: 'register'
+        name: 'login'
       })
     }
   }
@@ -78,20 +69,20 @@ export default {
 </script>
 
 <style>
-  .login-wrap {
+  .register-wrap {
     background-color: #324152;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .login-form {
+  .register-form {
     background-color: #fff;
     width: 400px;
     padding: 30px;
     border-radius: 5px;
   }
-  .login-form .login-btn {
+  .register-form .register-btn {
     width: 100%;
   }
 </style>

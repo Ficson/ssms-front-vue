@@ -3,15 +3,21 @@
     <el-header class="header">
       <el-row>
         <el-col :span="4">
-          <div class="grid-content bg-purple">
+          <div class="logo">
             <img src="./logo1.png" alt="">
           </div>
         </el-col>
-        <el-col :offset="16" :span="4"><div class="grid-content bg-purple">
-          <a
-            href="#"
-            @click.prevent="logout">退出</a>
-        </div>
+        <el-col :span="4" class="userinfo">
+          <el-dropdown  @command="handleCommand"  trigger="hover">
+            <span class="el-dropdown-link userinfo-inner">
+              <img class="personal_avatar"
+                   src="../../assets/images/personal_avatar.png"
+                   alt="" /></span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="personalInfo">个人信息</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </el-col>
       </el-row>
     </el-header>
@@ -33,7 +39,7 @@
             </template>
             <el-menu-item index="/marking-test">短信测试</el-menu-item>
             <el-menu-item index="/marking-send">发送短信</el-menu-item>
-            <el-menu-item index="2-3">模板管理</el-menu-item>
+            <el-menu-item index="/marking-manage">模板管理</el-menu-item>
             <el-menu-item index="2-4">通讯录管理</el-menu-item>
             <el-menu-item index="2-5">短信回复</el-menu-item>
             <el-menu-item index="2-6">发送记录</el-menu-item>
@@ -83,7 +89,7 @@
             <el-menu-item index="6-5">修改密码</el-menu-item>
           </el-submenu>
 
-            <el-submenu index="7">
+          <el-submenu index="7">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>短信设置</span>
@@ -104,40 +110,56 @@
 
 <script>
 import {removeUserInfo} from '@/assets/js/auth'
+import {getUserInfo} from '@/assets/js/auth.js'
 export default {
   data () {
-    return {}
+    return {
+      currentTelephone: ''
+    }
+  },
+  mounted () {
+    this.currentTelephone = getUserInfo()
+    console.log(this.currentTelephone.telephone)
   },
   methods: {
-    logout () {
-      this.$confirm('确认退出吗?', '退出提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => { // 点击确认执行 resolve 函数
-        // 1. 删除本地存储中的用户登陆信息
-        removeUserInfo()
-        // 2. 跳转到登陆视图
-        this.$router.push({
-          name: 'login'
-        })
-        // 提示用户退出成功
-        this.$message({
-          type: 'success',
-          message: '退出成功!'
-        })
-      }).catch(() => {
-        // 点击取消的处理
-      })
-    },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
+    handleCommand (command) {
+      switch (command) {
+        // 如果是退出
+        case 'logout':
+          this.$confirm('确认退出吗?', '退出提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => { // 点击确认执行 resolve 函数
+            // 1. 删除本地存储中的用户登陆信息
+            removeUserInfo()
+            // 2. 跳转到登陆视图
+            this.$router.push({
+              name: 'login'
+            })
+            // 提示用户退出成功
+            this.$message({
+              type: 'success',
+              message: '退出成功!'
+            })
+          }).catch(() => {
+            // 点击取消的处理
+          })
+          break
+        // 如果是查看用户信息
+        case 'personalInfo':
+        // this.$refs.personalInfo.$emit('openPersonalInfoDialog')
+      }
     }
+  },
+  handleOpen (key, keyPath) {
+    console.log(key, keyPath)
+  },
+  handleClose (key, keyPath) {
+    console.log(key, keyPath)
   }
 }
+
 </script>
 
 <style>
@@ -150,7 +172,22 @@ export default {
     background-color: #B3C0D1;
     line-height: 60px;
   }
-
+  .userinfo {
+    text-align: right;
+    padding-right: 35px;
+    float: right;
+  }
+  .userinfo-inner {
+    cursor: pointer;
+    color: #fff;
+  }
+  .personal_avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin: 10px 0px 10px 10px;
+    float: right;
+  }
   .aside {
     background-color: #D3DCE6;
   }
@@ -159,4 +196,5 @@ export default {
     background-color: #E9EEF3;
     height: 100%;
   }
+
 </style>
