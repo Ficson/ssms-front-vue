@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName"><el-tab-pane label="手动输入" name="first">
       <!--手动输入标签页-->
-      <el-tab-pane label="手动输入" name="first">
+
         <el-alert
           title="用于给会员，批量发送营销、通知、提醒信息，简单便捷"
           type="info"
@@ -11,7 +11,6 @@
 
         <el-form ref="form1" v-model="form1"
                  label-width="120px"
-                 @submit.prevent="onSubmit1"
                  style="margin:20px;width:60%;min-width:600px;">
           <el-form-item label="输入手机号">
             <el-input type="textarea"
@@ -42,7 +41,7 @@
                       v-model="form1.context"></el-input>
           </el-form-item>
           <el-form-item>
-           <el-button type="primary">提交</el-button>
+           <el-button type="primary" v-on:click="manuFormSubmit">提交</el-button>
           </el-form-item>
          </el-form>
       </el-tab-pane>
@@ -55,7 +54,6 @@
       </el-alert>
       <el-form ref="form2" v-model="form2"
                label-width="120px"
-               @submit.prevent="onSubmit2"
                style="margin:20px;width:60%;min-width:600px;">
         <el-form-item>
         <el-upload
@@ -65,7 +63,7 @@
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          <div class="el-upload__tip" slot="tip">只能上传文件，且不超过500kb</div>
         </el-upload>
         </el-form-item>
         <el-form-item
@@ -84,7 +82,7 @@
                     v-model="form2.context"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">提交</el-button>
+          <el-button type="primary" v-on:click="fileFormSubmit">提交</el-button>
         </el-form-item>
       </el-form>
       </el-tab-pane>
@@ -98,17 +96,21 @@
 
         <el-form ref="form3" v-model="form3"
                  label-width="120px"
-                 @submit.prevent="onSubmit1"
                  style="margin:20px;width:60%;min-width:600px;">
-          <el-form-item label="选择分组" >
-            <el-select v-model="form3.group" placeholder="默认分组">
-              <el-option label="默认分组" value="defaultGroup"></el-option>
-            </el-select>
+            <el-form-item label="选择分组">
+              <el-select v-model="form3.currentGroup" placeholder="请选择分组" >
+                <el-option
+                  v-for="group in contactgroups"
+                  :key="group.id"
+                  :label="group.groupName"
+                  :value="group.groupName">
+                </el-option>
+              </el-select>
           </el-form-item>
-          <el-form-item label="设置签名" >
-            <el-select v-model="form3.signature" placeholder="短信猴">
-              <el-option label="短信猴" value="defaultGroup"></el-option>
-            </el-select>
+          <el-form-item label="设置签名" ><el-select v-model="form3.signature" placeholder="短信猴">
+            <el-option label="短信猴" value="defaultGroup"></el-option>
+          </el-select>
+
             <el-button color="blue">添加签名</el-button>
           </el-form-item>
           <el-form-item
@@ -127,7 +129,7 @@
   </div>
 </template>
 <script>
-
+// import {getUserInfo} from '@/assets/js/auth.js'
 export default {
   data () {
     return {
@@ -138,22 +140,70 @@ export default {
         context: ''
       },
       form2: {
+        telephone: [],
         signature: '短信猴',
         context: ''
       },
       form3: {
-        group: '',
+        groups: ['分组1, 分组2'],
+        currentGroup: '',
+        telephone: [],
         signature: '短信猴',
         context: ''
-      }
+      },
+      contactgroups: [{
+        addTs: 1520909351000,
+        updateTs: 1529240381000,
+        id: 36971,
+        userId: 38265,
+        groupName: '分组1',
+        mobileNum: 2,
+        isDefault: 1,
+        isDele: 0,
+        type: 1
+      }, {
+        addTs: 1529243516000,
+        updateTs: 1529243516000,
+        id: 39862,
+        userId: 38265,
+        groupName: '分组2',
+        mobileNum: 0,
+        isDefault: 0,
+        isDele: 0,
+        type: 1
+      }]
     }
   },
+  mounted () {
+    /* const userInfo = JSON.parse(getUserInfo())
+    const currentTelephone = userInfo.telephone
+    const res = this.$http.post('https://a5110ee0-141f-4b17-9810-1b3d4f0a33be.mock.pstmn.io/getContactGroup', currentTelephone)
+    this.results = res */
+  },
   methods: {
-    handleClick (tab, event) {
-      console.log(tab, event)
-    },
     addTemplate () {
-
+    },
+    async manuFormSubmit () {
+      const res = await this.$http.post('https://57c1c3b4-697a-49a8-8e5a-50b666795676.mock.pstmn.io/sendMessage', this.userForm.telephone)
+      const data = res.data
+      if (data.status === 200) {
+        // 给出发送验证码成功的提示
+        this.$message({
+          type: 'success',
+          message: '短信发送成功!'
+        })
+      }
+    },
+    async fileFormSubmit () {
+      const res = await this.$http.post('https://57c1c3b4-697a-49a8-8e5a-50b666795676.mock.pstmn.io/sendMessage', this.userForm.telephone)
+      const data = res.data
+      if (data.status === 200) {
+        // 给出发送验证码成功的提示
+        this.$message({
+          type: 'success',
+          message: '短信发送成功!'
+        })
+      }
     }
   }
 }

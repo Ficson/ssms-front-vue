@@ -2,7 +2,7 @@ import axios from 'axios'
 import {getToken} from './auth'
 
 const http = axios.create({
-  baseURL: 'https://57c1c3b4-697a-49a8-8e5a-50b666795676.mock.pstmn.io/'
+  // baseURL: 'https://57c1c3b4-697a-49a8-8e5a-50b666795676.mock.pstmn.io/'
 })
 
 // 添加请求拦截器

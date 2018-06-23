@@ -6,6 +6,9 @@ import Home from '@/components/home/home.vue'
 import MarkingTest from '@/components/marking/marking-test.vue'
 import MarkingSend from '@/components/marking/marking-send.vue'
 import MarkingManage from '@/components/marking/marking-manage.vue'
+import MarkingTelNumbers from '@/components/marking/marking-tel-numbers.vue'
+import AccountCertification from '@/components/account/account-certfication.vue'
+import MessageSettingSignature from '@/components/message-setting/message-setting-signature.vue'
 import {getUserInfo} from '@/assets/js/auth.js'
 Vue.use(Router)
 
@@ -31,6 +34,21 @@ const router = new Router({
           name: 'marking-manage',
           path: '/marking-manage',
           component: MarkingManage
+        },
+        {
+          name: 'marking-tel-numbers',
+          path: '/marking-tel-numbers',
+          component: MarkingTelNumbers
+        },
+        {
+          name: 'account-certification',
+          path: '/account-certification',
+          component: AccountCertification
+        },
+        {
+          name: 'message-setting-signature',
+          path: '/message-setting-signature',
+          component: MessageSettingSignature
         }
       ]
     },

@@ -10,6 +10,7 @@
         <el-col :span="4" class="userinfo">
           <el-dropdown  @command="handleCommand"  trigger="hover">
             <span class="el-dropdown-link userinfo-inner">
+              <span>{{currentTelephone}}</span>
               <img class="personal_avatar"
                    src="../../assets/images/personal_avatar.png"
                    alt="" /></span>
@@ -26,11 +27,8 @@
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo aside-menu"
-          @open="handleOpen"
-          @close="handleClose"
           :unique-opened="false"
           :router="true">
-
           <el-menu-item index="/">首页</el-menu-item>
           <el-submenu index="2">
             <template slot="title">
@@ -40,7 +38,7 @@
             <el-menu-item index="/marking-test">短信测试</el-menu-item>
             <el-menu-item index="/marking-send">发送短信</el-menu-item>
             <el-menu-item index="/marking-manage">模板管理</el-menu-item>
-            <el-menu-item index="2-4">通讯录管理</el-menu-item>
+            <el-menu-item index="/marking-tel-numbers">通讯录管理</el-menu-item>
             <el-menu-item index="2-5">短信回复</el-menu-item>
             <el-menu-item index="2-6">发送记录</el-menu-item>
           </el-submenu>
@@ -82,7 +80,7 @@
               <i class="el-icon-location"></i>
               <span>账户设置</span>
             </template>
-            <el-menu-item index="6-1">身份验证</el-menu-item>
+            <el-menu-item index="account-certification">身份验证</el-menu-item>
             <el-menu-item index="6-2">多账号管理</el-menu-item>
             <el-menu-item index="6-3">IP白名单管理</el-menu-item>
             <el-menu-item index="6-4">余额提醒</el-menu-item>
@@ -94,7 +92,7 @@
               <i class="el-icon-location"></i>
               <span>短信设置</span>
             </template>
-            <el-menu-item index="7-1">签名管理</el-menu-item>
+            <el-menu-item index="message-setting-signature">签名管理</el-menu-item>
             <el-menu-item index="7-2">防轰炸设置</el-menu-item>
             <el-menu-item index="7-3">黑名单管理</el-menu-item>
             <el-menu-item index="7-4">数据推送设置</el-menu-item>
@@ -118,8 +116,8 @@ export default {
     }
   },
   mounted () {
-    this.currentTelephone = getUserInfo()
-    console.log(this.currentTelephone.telephone)
+    var data = JSON.parse(getUserInfo())
+    this.currentTelephone = data.telephone
   },
   methods: {
     handleCommand (command) {
@@ -151,18 +149,20 @@ export default {
         // this.$refs.personalInfo.$emit('openPersonalInfoDialog')
       }
     }
-  },
-  handleOpen (key, keyPath) {
-    console.log(key, keyPath)
-  },
-  handleClose (key, keyPath) {
-    console.log(key, keyPath)
   }
+  /* handleOpen (key, keyPath) {
+    console.log(key, keyPath)
+  } */
+  // template上面删掉了@open="handleOpen"
+  /* handleClose (key, keyPath) {
+    console.log(key, keyPath)
+  } */
+  // template上面删掉了@close="handleClose"
 }
 
 </script>
 
-<style>
+<style lang="less">
 
   .container, .aside .aside-menu {
     height: 100%;
@@ -171,12 +171,22 @@ export default {
   .header {
     background-color: #B3C0D1;
     line-height: 60px;
-  }
+
   .userinfo {
     text-align: right;
     padding-right: 35px;
     float: right;
   }
+  }
+  .aside {
+    background-color: #D3DCE6;
+  }
+
+  .main {
+    background-color: #E9EEF3;
+    height: 100%;
+  }
+
   .userinfo-inner {
     cursor: pointer;
     color: #fff;
@@ -188,13 +198,4 @@ export default {
     margin: 10px 0px 10px 10px;
     float: right;
   }
-  .aside {
-    background-color: #D3DCE6;
-  }
-
-  .main {
-    background-color: #E9EEF3;
-    height: 100%;
-  }
-
 </style>

@@ -1,15 +1,24 @@
 <template>
   <div class="register-wrap">
     <el-form class="register-form" label-position="top" ref="form" :model="userForm" label-width="80px">
-      <h2 class="heading">用户注册</h2>
-      <el-form-item label="手机号码">
+      <h2 class="title">用户注册</h2>
+      <el-form-item>
         <el-input
-          v-model="userForm.telephone"></el-input>
+          v-model="userForm.telephone"
+          placeholder="手机号码"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item>
         <el-input
           type="password"
-          v-model="userForm.password"></el-input>
+          v-model="userForm.password"
+          placeholder="密码"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="userForm.captcha"
+          placeholder="验证码"
+          style="width: 200px"></el-input>
+        <el-button @click="getCaptcha">获取验证码</el-button>
       </el-form-item>
       <el-form-item>
         <el-button  class="register-btn" type="primary" @click="register">立即注册</el-button>
@@ -28,7 +37,8 @@ export default {
     return {
       userForm: {
         telephone: '',
-        password: ''
+        password: '',
+        captcha: ''
       }
     }
   },
@@ -36,9 +46,17 @@ export default {
     async register () {
       var telephone = this.userForm.telephone
       var password = this.userForm.password
+      var captcha = this.userForm.captcha
       if (telephone === '' || password === '') {
         this.$message({
           message: '账号或密码为空！',
+          type: 'error'
+        })
+        return
+      }
+      if (captcha === '') {
+        this.$message({
+          message: '验证码为空！',
           type: 'error'
         })
         return
@@ -52,10 +70,10 @@ export default {
         this.$router.push({
           name: 'home'
         })
-        // 给出登陆成功的提示消息
+        // 给出注册成功的提示消息
         this.$message({
           type: 'success',
-          message: '登陆成功!'
+          message: '注册成功，直接登录!'
         })
       }
     },
@@ -63,6 +81,17 @@ export default {
       this.$router.push({
         name: 'login'
       })
+    },
+    async getCaptcha () {
+      const res = await this.$http.post('/getCaptcha', this.userForm.telephone)
+      const data = res.data
+      if (data.status === 200) {
+        // 给出发送验证码成功的提示
+        this.$message({
+          type: 'success',
+          message: '已发送验证码!'
+        })
+      }
     }
   }
 }
@@ -75,6 +104,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .title {
+    margin: 0px auto 40px auto;
+    text-align: center;
   }
   .register-form {
     background-color: #fff;
